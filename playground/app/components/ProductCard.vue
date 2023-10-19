@@ -8,11 +8,12 @@ const props = defineProps({
   }
 })
 
+const config = useRuntimeConfig()
+
 const handleAddToCart = async () => {
   if (props.product?.firstVariant?.id)
     await sdk.odoo.cartAdd({ productId: props.product.firstVariant.id, quantity: 1 }, { 'cartAdd': '123' });
 }
-
 
 import { SfRating, SfCounter, SfLink, SfButton, SfIconShoppingCart, SfIconFavorite } from '@storefront-ui/vue';
 import { Product } from '@erpgap/odoo-sdk-api-client';
@@ -21,8 +22,7 @@ import { Product } from '@erpgap/odoo-sdk-api-client';
   <div class="border border-neutral-200 rounded-md hover:shadow-lg max-w-[300px]">
     <div class="relative">
       <SfLink href="#">
-        <img :src="`https://vsfdemo15.labs.odoogap.com${product.image}`" alt="Great product"
-          class="block object-cover h-auto rounded-md aspect-square" :width="300" :height="300" />
+        <img :src="`${config.public.odooImageUrl}${product.image}`" alt="Great product" class="block object-cover h-auto rounded-md aspect-square" :width="300" :height="300" />
       </SfLink>
       <SfButton type="button" variant="tertiary" size="sm" square
         class="absolute bottom-0 right-0 mr-2 mb-2 bg-white border border-neutral-200 !rounded-full"
@@ -42,7 +42,7 @@ import { Product } from '@erpgap/odoo-sdk-api-client';
       <p class="block py-2 font-normal leading-5 typography-text-sm text-neutral-700">
         Lightweight • Non slip • Flexible outsole • Easy to wear on and off
       </p>
-      <span class="block pb-2 font-bold typography-text-lg">$2345,99</span>
+      <span class="block pb-2 font-bold typography-text-lg">$ {{ product.price }}</span>
       <SfButton type="button" size="sm" @click="handleAddToCart">
         <template #prefix>
           <SfIconShoppingCart size="sm" />
